@@ -7,20 +7,14 @@
 
 Cube::Cube()
 {
-    m_shader = std::make_shared<ShaderProgram>();
 	m_rotation = 0.0f;
 	m_translation = glm::vec3(0.0f, 0.0f, 0.0f);
 	m_color = glm::vec3(1.0f);
 	m_size = 1.0f;
 }
 
-Cube::Cube(glm::vec3& postion, ShaderProgram *shader)
+Cube::Cube(glm::vec3& postion)
 {
-	//if (!shader)
-	//{
-	//	throw std::logic_error("No shader");
-	//}
-	//m_shader = std::shared_ptr<ShaderProgram>(shader);
 	m_rotation = 0.0f;
 	m_translation = glm::vec3(0.0f, 0.0f, 0.0f);
 	m_color = glm::vec3(1.0f);
@@ -29,27 +23,21 @@ Cube::Cube(glm::vec3& postion, ShaderProgram *shader)
 
 Cube::~Cube()
 {
-    m_shader.reset();
 }
 
-void Cube::init(ShaderProgram* shader)
+void Cube::init(ShaderProgram const& shader)
 {
-    if (!shader)
-    {
-    	throw std::logic_error("No shader");
-    }
-    m_shader = std::shared_ptr<ShaderProgram>(shader);
-	enableVertexAttribIndices();
+	enableVertexAttribIndices(shader);
 	uploadCubeDataToVbo();
-    mapVboDataToShaderAttributeLocation();
+    mapVboDataToShaderAttributeLocation(shader);
 
 }
 
-void Cube::enableVertexAttribIndices()
+void Cube::enableVertexAttribIndices(ShaderProgram const& shader)
 {
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
-	GLint positionAttribLocation = m_shader.get()->getAttribLocation("position");
+	GLint positionAttribLocation = shader.getAttribLocation("position");
 	glEnableVertexAttribArray(positionAttribLocation);
 
 	// Restore defaults
@@ -110,18 +98,12 @@ void Cube::uploadCubeDataToVbo()
 
     CHECK_GL_ERRORS;
 }
-void Cube::mapVboDataToShaderAttributeLocation()
+void Cube::mapVboDataToShaderAttributeLocation(ShaderProgram const& shader)
 {
     glBindVertexArray(m_vao);
 
-    // Tell GL how to map data from the vertex buffer "m_vbo_triangle" into the
-    // "position" vertex attribute index of our shader program.
-    // This mapping information is stored in the Vertex Array Object "m_vao_triangle".
-    // That is why we must bind "m_vao_triangle" first in the line above, so
-    // that "m_vao_triangle" captures the data mapping issued by the call to
-    // glVertexAttribPointer(...).
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    GLint positionAttribLocation = m_shader.get()->getAttribLocation("position");
+    GLint positionAttribLocation = shader.getAttribLocation("position");
     glVertexAttribPointer(positionAttribLocation, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
     //-- Unbind target, and restore default values:
@@ -131,14 +113,14 @@ void Cube::mapVboDataToShaderAttributeLocation()
     CHECK_GL_ERRORS;
 }
 
-void Cube::draw()
+void Cube::draw(ShaderProgram const& shader)
 {
     glBindVertexArray(m_vao);
 
-    m_shader.get()->enable();
+    shader.enable();
     glEnable(GL_DEPTH_TEST);
     glDrawArrays(GL_TRIANGLES, 0, 36);
-    m_shader.get()->disable();
+    shader.disable();
 
 
     // Restore defaults

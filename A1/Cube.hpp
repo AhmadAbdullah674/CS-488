@@ -14,14 +14,14 @@
 class Cube {
 public:
 	Cube();
-	Cube(glm::vec3 &postion, ShaderProgram *shader);
+	Cube(glm::vec3 &postion);
 	~Cube();
-	void init(ShaderProgram* shader);
-	void draw();
+	void init(ShaderProgram const& shader);
+	void draw(ShaderProgram const& shader);
 protected:
-	void enableVertexAttribIndices();
+	void enableVertexAttribIndices(ShaderProgram const& shader);
 	void uploadCubeDataToVbo();
-	void mapVboDataToShaderAttributeLocation();
+	void mapVboDataToShaderAttributeLocation(ShaderProgram const& shader);
 
 	GLuint m_vao; // Vertex Array Object
 	GLuint m_vbo; // Vertex Buffer Object
@@ -30,7 +30,6 @@ protected:
 	glm::vec3 m_translation;
 	glm::vec3 m_color;
 	float m_size;
-	std::shared_ptr<ShaderProgram> m_shader;
 
 };
 
