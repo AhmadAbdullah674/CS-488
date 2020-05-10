@@ -5,18 +5,18 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/io.hpp>
 
-Cube::Cube()
+Cube::Cube(float const& size)
 {
 	m_rotation = 0.0f;
 	m_translation = glm::vec3(0.0f, 0.0f, 0.0f);
-	m_color = glm::vec3(1.0f);
-	m_size = 1.0f;
+	m_color = glm::vec3(1.0f, 1.0f, 1.0f);
+	m_size = size;
 }
 
 Cube::Cube(glm::vec3& postion)
 {
 	m_rotation = 0.0f;
-	m_translation = glm::vec3(0.0f, 0.0f, 0.0f);
+	m_translation = glm::vec3(postion);
 	m_color = glm::vec3(1.0f);
 	m_size = 1.0f;
 }
@@ -119,6 +119,21 @@ void Cube::draw(ShaderProgram const& shader)
 
     shader.enable();
     glEnable(GL_DEPTH_TEST);
+    GLint uniformLocation_colour = shader.getUniformLocation("colour");
+
+    // Set the uniform's value.
+    glUniform3f(uniformLocation_colour, m_color.r, m_color.g, m_color.b);
+
+    //vec3 z_axis(0.0f, 1.0f, 0.0f);
+    //glm::mat4 transform;// = glm::mat4();//glm::translate(mat4(), vec3(m_shape_translation, 0.0f));
+    //transform *= glm::scale(glm::mat4(), glm::vec3(m_size));
+    //transform *= glm::rotate(mat4(), m_shape_rotation / RAD, z_axis);
+    glm::mat4 W;
+    W = glm::translate(W, glm::vec3(-float(16) / 2.0f, 0, -float(16) / 2.0f ));
+    W *= glm::scale(glm::mat4(), glm::vec3(m_size));
+    GLint uniformLocation_modelMatrix = shader.getUniformLocation("M");
+    glUniformMatrix4fv(uniformLocation_modelMatrix, 1, GL_FALSE,
+        glm::value_ptr(W));
     glDrawArrays(GL_TRIANGLES, 0, 36);
     shader.disable();
 

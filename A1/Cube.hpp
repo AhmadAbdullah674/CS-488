@@ -13,7 +13,7 @@
 
 class Cube {
 public:
-	Cube();
+	Cube(float const& size);
 	Cube(glm::vec3 &postion);
 	~Cube();
 	void init(ShaderProgram const& shader);

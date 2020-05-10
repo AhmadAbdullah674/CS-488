@@ -10,6 +10,7 @@
 
 #include "maze.hpp"
 #include "cube.hpp"
+#include <vector>
 
 class A1 : public CS488Window {
 public:
@@ -50,5 +51,5 @@ private:
 	
 	float colour[3];
 	int current_col;
-	Cube cube = Cube();
+	std::vector<Cube> cubes;
 };

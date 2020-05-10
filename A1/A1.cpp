@@ -13,6 +13,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+const float PI = 3.14159265f;
+const float RAD = 180.0f / PI;
+
 using namespace glm;
 using namespace std;
 
@@ -70,9 +73,11 @@ void A1::init()
 	V_uni = m_shader.getUniformLocation( "V" );
 	M_uni = m_shader.getUniformLocation( "M" );
 	col_uni = m_shader.getUniformLocation( "colour" );
-
+	
+	cubes.push_back(Cube(0.5f));
+	
 	initGrid();
-	cube.init(m_shader);
+	cubes[0].init(m_shader);
 	// Set up initial view and projection matrices (need to do this here,
 	// since it depends on the GLFW window being set up correctly).
 	view = glm::lookAt( 
@@ -213,7 +218,9 @@ void A1::draw()
 	// Create a global transformation for the model (centre it).
 	mat4 W;
 	W = glm::translate( W, vec3( -float(DIM)/2.0f, 0, -float(DIM)/2.0f ) );
-
+	//vec3 z_axis(0.0f, 1.0f, 0.0f);
+	W *= glm::scale(glm::mat4(), glm::vec3(1.0f));
+	//view *= glm::rotate(mat4(), 120.0f / RAD, z_axis);
 	m_shader.enable();
 		glEnable( GL_DEPTH_TEST );
 
@@ -225,7 +232,7 @@ void A1::draw()
 		glBindVertexArray( m_grid_vao );
 		glUniform3f( col_uni, 1, 1, 1 );
 		glDrawArrays( GL_LINES, 0, (3+DIM)*4 );
-		cube.draw(m_shader);
+		cubes[0].draw(m_shader);
 		// Draw the cubes
 		// Highlight the active square.
 	m_shader.disable();
