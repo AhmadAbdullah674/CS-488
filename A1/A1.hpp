@@ -9,6 +9,7 @@
 #include "cs488-framework/ShaderProgram.hpp"
 
 #include "maze.hpp"
+#include "cube.hpp"
 
 class A1 : public CS488Window {
 public:
@@ -46,7 +47,8 @@ private:
 	// Matrices controlling the camera and projection.
 	glm::mat4 proj;
 	glm::mat4 view;
-
+	
 	float colour[3];
 	int current_col;
+	Cube cube = Cube();
 };

@@ -31,7 +31,9 @@ A1::A1()
 //----------------------------------------------------------------------------------------
 // Destructor
 A1::~A1()
-{}
+{
+	cube.~Cube();
+}
 
 //----------------------------------------------------------------------------------------
 /*
@@ -71,7 +73,7 @@ void A1::init()
 	col_uni = m_shader.getUniformLocation( "colour" );
 
 	initGrid();
-
+	cube.init(&m_shader);
 	// Set up initial view and projection matrices (need to do this here,
 	// since it depends on the GLFW window being set up correctly).
 	view = glm::lookAt( 
@@ -224,7 +226,7 @@ void A1::draw()
 		glBindVertexArray( m_grid_vao );
 		glUniform3f( col_uni, 1, 1, 1 );
 		glDrawArrays( GL_LINES, 0, (3+DIM)*4 );
-
+		cube.draw();
 		// Draw the cubes
 		// Highlight the active square.
 	m_shader.disable();
