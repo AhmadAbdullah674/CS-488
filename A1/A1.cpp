@@ -73,8 +73,14 @@ void A1::init()
 	V_uni = m_shader.getUniformLocation( "V" );
 	M_uni = m_shader.getUniformLocation( "M" );
 	col_uni = m_shader.getUniformLocation( "colour" );
-	
-	cubes.push_back(Cube(0.5f));
+	//for (int i = 0; i < DIM; i++) {
+	//	for (int j = 0; j < DIM; j++) {
+	//		if(m.getValue(i,j))
+	//		cubes.push_back(Cube(vec3(0, 0, 0), GLfloat(1.0)));
+	//	}
+	//}
+	//cubes.push_back(Cube(vec3(0, 0, 0), GLfloat(1.0)));
+	cubes.push_back(Cube(vec3(7.5, 0, 7.5), GLfloat(1.0)));
 	
 	initGrid();
 	cubes[0].init(m_shader);
@@ -232,7 +238,11 @@ void A1::draw()
 		glBindVertexArray( m_grid_vao );
 		glUniform3f( col_uni, 1, 1, 1 );
 		glDrawArrays( GL_LINES, 0, (3+DIM)*4 );
-		cubes[0].draw(m_shader);
+		
+		for (int i = 0; i < cubes.size(); i++) {
+			//cout << cubes.size() << endl;
+			cubes[i].draw(m_shader);
+		}
 		// Draw the cubes
 		// Highlight the active square.
 	m_shader.disable();

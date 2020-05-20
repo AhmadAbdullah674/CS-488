@@ -13,8 +13,7 @@
 
 class Cube {
 public:
-	Cube(float const& size);
-	Cube(glm::vec3 &postion);
+	Cube(glm::vec3 postion, GLfloat size);
 	~Cube();
 	void init(ShaderProgram const& shader);
 	void draw(ShaderProgram const& shader);
